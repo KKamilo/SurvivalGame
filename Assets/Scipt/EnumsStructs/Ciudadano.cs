@@ -10,7 +10,7 @@ namespace NPC // NameSpace que guarga toda la estructura del Ciudadano
         public class Ciudadano : ReguladorNPC
         {
             public DatosNPC datoNPC;
-            public string yoSoy;
+            public static string yoSoy;
             float tempDistan;
             float vision = 5f;
             Vector3 direction;
@@ -46,6 +46,16 @@ namespace NPC // NameSpace que guarga toda la estructura del Ciudadano
                     }
                 }
                 //hace que los ciudadanos corran de los Zombis mas cercanos 
+                foreach (Ninja ninja in Transform.FindObjectsOfType<Ninja>())
+                {
+                    tempDistan = Vector3.Distance(ninja.transform.position, transform.position);
+                    if (tempDistan < vision)
+                    {
+                        vision = tempDistan;
+                        enemy = ninja.gameObject; //remplasa el null por el Zombi mas sercano
+                    }
+                }
+                   
                 if (enemy != null)
                 {
                     direction = Vector3.Normalize(enemy.transform.position - transform.position);
@@ -65,7 +75,15 @@ namespace NPC // NameSpace que guarga toda la estructura del Ciudadano
                     Zombi transform = gameObject.AddComponent<Zombi>();
                     transform.datos = (DatoZombis)gameObject.GetComponent<Ciudadano>().datoNPC;
                     Destroy(gameObject.GetComponent<Ciudadano>());
-                    Juego.enemy++;
+                    Juego.zombis++;
+                    Juego.cyti--;
+                }
+                else if (collision.transform.tag == "Ninja")
+                {
+                    Ninja transform = gameObject.AddComponent<Ninja>();
+                    transform.datoNinya = (DatosNinja)gameObject.GetComponent<Ciudadano>().datoNPC;
+                    Destroy(gameObject.GetComponent<Ciudadano>());
+                    Juego.ninjas++;
                     Juego.cyti--;
 
                 }
@@ -80,11 +98,17 @@ namespace NPC // NameSpace que guarga toda la estructura del Ciudadano
            
             static public explicit operator DatoZombis(DatosNPC cambio)
             {
-                DatoZombis z = new DatoZombis();
-                z.edad = cambio.age;
-                return z;
+                DatoZombis zom = new DatoZombis();
+                zom.edad = cambio.age;
+                return zom;
             }
-       }
+            static public explicit operator DatosNinja(DatosNPC cambio)
+            {
+                DatosNinja ninj = new DatosNinja();
+                ninj.edad = cambio.age;
+                return ninj;
+            }
+        }
         public enum Nombres
         { Krooth, Zacot, Skooth, Griath, Arait, Catinius, Conbertus, Ambilos, Divicatus, Centus, Donnius, nCenno, Cotto, Ambisavus, Tritó, Vírico, Litugena, Epasius, Epia, Regula }
         

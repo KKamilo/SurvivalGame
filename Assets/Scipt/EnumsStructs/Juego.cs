@@ -8,20 +8,25 @@ using UnityEngine.UI;
 public class Juego : MonoBehaviour //Generador
 {
     public static int cyti = 0; // variable de contador para mostrar cuantos ciudadanos hay
-    public static int enemy = 0; // variable de contador para mostrar cuantos Zombis hay
+    public static int zombis = 0; // variable de contador para mostrar cuantos Zombis hay
+    public static int ninjas = 0;
     public Text textZ; // testo UI que es usado como contador de Zombis
     public Text textC; // testo UI que es usado como contador de Aldeanos
+    public Text textoN;
+    public Text mensajesEnemy;
     public Text mensaje;
+    public Text municion;
     public static bool vivo = true; // Bool de verificador de vida
-    public static string mensajeZom;
-    public GameObject apagarTex;
+    public static string mensajeEnemi;
+    public static string mensajeCyti;
+    public static string balas;
     public static GameObject perder;
     public Color colo;
     readonly int cantidad; //variable de Readonly para la creacion de los cubos
     public Juego() // costructor para inicialisar el Readonly 
     {
         System.Random rnd = new System.Random(); //se creo una bariable Random 
-        cantidad = rnd.Next(5, 16);// se le agrega los parametros para la variable creada anterior mente
+        cantidad = rnd.Next(5, 25);// se le agrega los parametros para la variable creada anterior mente
     }
     public static float hSpied;//variable estatica para la velocidad del herue
     
@@ -29,18 +34,18 @@ public class Juego : MonoBehaviour //Generador
     {
 
         perder = GameObject.Find("Image");// imajen que saldra al perder
-        //perder.SetActive(false);// se apaga la imajen para que no salga al principio
+        perder.SetActive(false);// se apaga la imajen para que no salga al principio
         hSpied = Random.Range(0.1f, 0.5f);
         int i = 0;
         int k = 0;
         while (i < cantidad)
         {
-            int n = Random.Range(1, 3);
+            int n = Random.Range(1, 4);
             GameObject objec = GameObject.CreatePrimitive(PrimitiveType.Cube);
             objec.AddComponent<Rigidbody>();
             Vector3 v = new Vector3();
-            v.x = Random.Range(5, 50);
-            v.z = Random.Range(5, 50);
+            v.x = Random.Range(-30, 39);
+            v.z = Random.Range(-39, 39);
             objec.transform.position = v;
             if (i == 0 && k == 0)
             {
@@ -59,7 +64,7 @@ public class Juego : MonoBehaviour //Generador
                         objec.AddComponent(typeof(Ciudadano));
                         break;
                     case 3:
-                        objec.AddComponent(typeof(Momia));
+                        objec.AddComponent(typeof(Ninja));
                         break;
                 }
             }
@@ -67,19 +72,25 @@ public class Juego : MonoBehaviour //Generador
         }
         foreach (Zombi zombi in Transform.FindObjectsOfType<Zombi>()) //Usamos Transform.FindObjectsOfType para buscar el objetoreferente al zombi en la esena
         {
-            enemy = enemy + 1;
+            zombis = zombis + 1;
         }
         foreach (Ciudadano aldeano in Transform.FindObjectsOfType<Ciudadano>()) //Usamos Transform.FindObjectsOfType para buscar el objetoreferente al ciudadano en la esena
         {
             cyti = cyti + 1;
         }
-
+        foreach (Ninja ninja in Transform.FindObjectsOfType<Ninja>())
+        {
+            ninjas = ninjas + 1;
+        }
 
     }
     public void Update ()
     {
-        textZ.text = "Zombi: " + enemy; // modifica el texto del cambas y muestra el numero de enemigos
+        textZ.text = "Zombis: " + zombis; // modifica el texto del cambas y muestra el numero de enemigos
         textC.text = "Aldeanos:" + cyti; // modifica el texto del cambas y muestra el numero de aliados
-        mensaje.text = mensajeZom;
+        textoN.text = "Ninjas: " + ninjas;
+        mensajesEnemy.text = mensajeEnemi;
+        mensaje.text = mensajeCyti;
+        municion.text = "Balas: "+balas;
     }
 }
