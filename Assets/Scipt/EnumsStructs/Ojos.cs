@@ -11,7 +11,7 @@ public class Ojos : MonoBehaviour
     public bool invertedMouse;
     void Update()
     {
-        if (Juego.vivo == true)
+        if (Juego.vivo == true && Juego.mostro > 0)
         {
             float xrot = Input.GetAxisRaw("Mouse X");
             MouseX += xrot * sensibilidad;

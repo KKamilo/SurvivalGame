@@ -8,6 +8,9 @@ TagManager:
   - City
   - Herue
   - Ninja
+  - bala
+  - item
+  - tierra
   layers:
   - Default
   - TransparentFX
@@ -18,8 +21,8 @@ TagManager:
   - 
   - 
   - PostProcessing
-  - 
-  - 
+  - hero
+  - bullet
   - 
   - 
   - 

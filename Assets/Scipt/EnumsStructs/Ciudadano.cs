@@ -14,6 +14,7 @@ namespace NPC // NameSpace que guarga toda la estructura del Ciudadano
             float tempDistan;
             float vision = 5f;
             Vector3 direction;
+            
 
             void Start()
             {
@@ -30,7 +31,7 @@ namespace NPC // NameSpace que guarga toda la estructura del Ciudadano
                 datoNPC.age = Random.Range(15, 101);
                 int rndName = Random.Range(0, 20);
                 datoNPC.nameNPC = (Nombres)rndName;
-                return "Hola, me llamo " + datoNPC.nameNPC + " y tengo " + datoNPC.age + " años";
+                return "Hola, me llamo " + datoNPC.nameNPC + " y tengo " + datoNPC.age + " años. "+"Hay Varios items en el mapa";
             }
             public void Update()
             {

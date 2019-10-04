@@ -7,29 +7,46 @@ using NPC.Ally;
 public class Hero : MonoBehaviour
 {
     float tempDistan;
-    float cantidad;
+    float balas= 0;
+    GameObject arma;
+    public Juego miJueguito;
     private void Awake()
     {
         gameObject.transform.tag = "Herue";
-        cantidad =9f;
-
+        
     }
     void Start()
     {
+        miJueguito = GameObject.FindObjectOfType<Juego>();
         Zombi.textoZom = Zombi.gusto;
         Ninja.textoNinja = Ninja.ataque;
-        
+
         gameObject.AddComponent(typeof(Player));
         GameObject cara = new GameObject();
         cara.AddComponent(typeof(Camera));
         cara.AddComponent(typeof(Ojos));//codigo de camara
-
+        
         gameObject.GetComponent<Player>().mirar = cara.GetComponent<Ojos>();
         cara.transform.SetParent(gameObject.transform);
-        cara.transform.localPosition = new Vector3 (0, 0.5f, 0);
+        cara.transform.localPosition = new Vector3 (0, 0.45f, 0.3f);
     }
     public void Update()
     {
+        
+        if (balas > 0 )
+        {
+            if (Juego.vivo == true && Juego.mostro > 0)
+            {
+                if (Input.GetMouseButtonDown(0))
+                {
+                    arma = Instantiate(Juego.armaEstatica, Vector3.zero, Quaternion.identity);
+                    arma.transform.SetParent(gameObject.transform, false);
+                    arma.transform.localPosition = new Vector3(0.2f, 0.3f, 0.6f);
+                    balas = balas - 1;
+                    Juego.kunais = balas.ToString();
+                }
+            }
+        }
         GameObject citi = null;
         GameObject zombiz = null;
         GameObject ninya = null;// GameObject que almacena a todos los Zombis en la esena
@@ -63,11 +80,15 @@ public class Hero : MonoBehaviour
             Juego.mensajeCyti = Ciudadano.yoSoy;
         else
             Juego.mensajeCyti = "";
+        
     }
-    private void OnTriggerEnter(Collider other)
+    private void OnCollisionEnter  (Collision collision)
     {
-        Destroy(other.gameObject);
-        Juego.balas = cantidad.ToString();
+        if (collision.transform.tag == "item")
+        { balas = balas+6;
+            Destroy(collision.gameObject);
+            Juego.kunais = balas.ToString();
+        }
     }
     
 }

@@ -10,17 +10,26 @@ public class Juego : MonoBehaviour //Generador
     public static int cyti = 0; // variable de contador para mostrar cuantos ciudadanos hay
     public static int zombis = 0; // variable de contador para mostrar cuantos Zombis hay
     public static int ninjas = 0;
+    public static int mostro;
+    public  int enemy= 1;
+    public static int vida = 1;
     public Text textZ; // testo UI que es usado como contador de Zombis
     public Text textC; // testo UI que es usado como contador de Aldeanos
     public Text textoN;
+    public Text salud;
     public Text mensajesEnemy;
     public Text mensaje;
     public Text municion;
     public static bool vivo = true; // Bool de verificador de vida
     public static string mensajeEnemi;
     public static string mensajeCyti;
-    public static string balas;
+    public static string kunais;
     public static GameObject perder;
+    public static GameObject ganas;
+
+
+    public GameObject arma;//para colocar el prefat del arma
+    public static GameObject armaEstatica;
     public Color colo;
     readonly int cantidad; //variable de Readonly para la creacion de los cubos
     public Juego() // costructor para inicialisar el Readonly 
@@ -32,9 +41,11 @@ public class Juego : MonoBehaviour //Generador
     
     void Awake()
     {
-
+        armaEstatica = arma;
         perder = GameObject.Find("Image");// imajen que saldra al perder
         perder.SetActive(false);// se apaga la imajen para que no salga al principio
+        ganas = GameObject.Find("YouWin");
+        ganas.SetActive(false);
         hSpied = Random.Range(0.1f, 0.5f);
         int i = 0;
         int k = 0;
@@ -89,8 +100,17 @@ public class Juego : MonoBehaviour //Generador
         textZ.text = "Zombis: " + zombis; // modifica el texto del cambas y muestra el numero de enemigos
         textC.text = "Aldeanos:" + cyti; // modifica el texto del cambas y muestra el numero de aliados
         textoN.text = "Ninjas: " + ninjas;
+        salud.text = "Vida: " + vida;
         mensajesEnemy.text = mensajeEnemi;
         mensaje.text = mensajeCyti;
-        municion.text = "Balas: "+balas;
+        municion.text = "Kunais: "+kunais;
+        enemy = zombis + ninjas;
+        mostro = enemy;
+        if (enemy == 0)
+        {
+            Juego.ganas.SetActive(true);
+            Juego.vivo = false;
+        }
     }
+
 }

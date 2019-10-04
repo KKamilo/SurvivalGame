@@ -16,4 +16,5 @@ public class Rotar : MonoBehaviour
     {
         transform.Rotate(giro*Time.deltaTime);
     }
+   
 }

@@ -9,7 +9,7 @@ public class Player : MonoBehaviour
    
     void Update()
     {
-        if (Juego.vivo == true)
+        if (Juego.vivo == true && Juego.mostro > 0)
         {
             if (Input.GetKey(KeyCode.W))
             {

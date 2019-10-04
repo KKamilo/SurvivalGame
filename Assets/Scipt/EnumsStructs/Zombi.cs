@@ -48,40 +48,9 @@ namespace NPC // NameSpace que guarga toda la estructura del enemigo
 
             public void Update()
             {
-                if (Juego.vivo == true) // Variable de vida del herue para ser ejetutada al empesar
+                if (Juego.vivo == true && Juego.mostro > 0) // Variable de vida del herue para ser ejetutada al empesar
                 {
-                    DistanciaHero = Vector3.Distance(player.transform.position, transform.position); // Distancia del Zombi al Herue
-                    GameObject aldeanoCerca = null;// GameObject que almacena a todos los Aldeanos en la esena
-
-                    foreach (Ciudadano aldeano in Transform.FindObjectsOfType<Ciudadano>())
-                    {
-                        tempCyti = Vector3.Distance(aldeano.transform.position, transform.position);// Distancia del Zombi al Aldeano mas sercano
-
-                        if (tempCyti < vision)
-                        {
-                            vision = tempCyti;
-                            aldeanoCerca = aldeano.gameObject; //remplasa el null por el Aldeano mas sercano
-
-                        }
-
-                    }
-                    // If que hace que el Zombi tenga como prioridad al Aldeano y no al herue
-                    if (aldeanoCerca != null)
-                    {
-                        directionCyti = Vector3.Normalize(aldeanoCerca.transform.position - transform.position);
-                        transform.position += directionCyti * 0.1f;
-                    }
-                    else if (DistanciaHero <= vision)
-                    {
-                        gusto = ZombiHable();
-                        directionHero = Vector3.Normalize(player.transform.position - transform.position);
-                        transform.position += directionHero * 0.1f;
-                    }
-                    else
-                    {
-                        vision = 5f;
-                        ComportarceNormal();
-                    }
+                    Pursuing();
                 }
             }
             // Finalisasion del juego al momento de colicionar con el herue 
@@ -90,10 +59,55 @@ namespace NPC // NameSpace que guarga toda la estructura del enemigo
                 if (collision.transform.tag == "Herue")
                 {
                     Juego.perder.SetActive(true);
+                    Juego.vida--;
                     Juego.vivo = false;
                 }
-            }
+                if (collision.transform.tag == "bala")
+                {
+                    datos.health = datos.health - Disparo.daño ;
+                    if (datos.health <= 0)
+                    {
+                        Destroy(this.gameObject);
+                        Juego.zombis--;
 
+                    }
+                }
+            }
+            public void Pursuing()
+            {
+                DistanciaHero = Vector3.Distance(player.transform.position, transform.position); // Distancia del Zombi al Herue
+                GameObject aldeanoCerca = null;// GameObject que almacena a todos los Aldeanos en la esena
+
+                foreach (Ciudadano aldeano in Transform.FindObjectsOfType<Ciudadano>())
+                {
+                    tempCyti = Vector3.Distance(aldeano.transform.position, transform.position);// Distancia del Zombi al Aldeano mas sercano
+
+                    if (tempCyti < vision)
+                    {
+                        vision = tempCyti;
+                        aldeanoCerca = aldeano.gameObject; //remplasa el null por el Aldeano mas sercano
+
+                    }
+
+                }
+                // If que hace que el Zombi tenga como prioridad al Aldeano y no al herue
+                if (aldeanoCerca != null)
+                {
+                    directionCyti = Vector3.Normalize(aldeanoCerca.transform.position - transform.position);
+                    transform.position += directionCyti * 0.1f;
+                }
+                else if (DistanciaHero <= vision)
+                {
+                    gusto = ZombiHable();
+                    directionHero = Vector3.Normalize(player.transform.position - transform.position);
+                    transform.position += directionHero * 0.1f;
+                }
+                else
+                {
+                    vision = 5f;
+                    ComportarceNormal();
+                }
+            }
         }
         //Estrus que almacena los datos del Zombi
         public struct DatoZombis
@@ -107,7 +121,6 @@ namespace NPC // NameSpace que guarga toda la estructura del enemigo
             // Gusto que pueden tener los Zombis
             
         }
-        
         public enum Gustos
         {
             Pierna,
@@ -132,6 +145,7 @@ namespace NPC // NameSpace que guarga toda la estructura del enemigo
                 datoNinya.skills = Random.Range(0, 6);
                 rotarcion = Random.Range(35, 95);
                 datoNinya.health = 10;
+                datoNinya.armor = 2;
                 datoNinya.attack = 2;
                 gameObject.transform.tag = "Ninja";
                 positionInicial = transform.position;
@@ -150,40 +164,45 @@ namespace NPC // NameSpace que guarga toda la estructura del enemigo
             }
             public void Update()
             {
-                if (Juego.vivo == true) // Variable de vida del herue para ser ejetutada al empesar
+                if (Juego.vivo == true && Juego.mostro > 0) // Variable de vida del herue para ser ejetutada al empesar
                 {
-                    DistanciaHero = Vector3.Distance(player.transform.position, transform.position); // Distancia del Zombi al Herue
-                    GameObject aldeanoCerca = null;// GameObject que almacena a todos los Aldeanos en la esena
+                    Pursuing();
 
-                    foreach (Ciudadano aldeano in Transform.FindObjectsOfType<Ciudadano>())
+                }
+            }
+            public void Pursuing()
+            {
+                DistanciaHero = Vector3.Distance(player.transform.position, transform.position); // Distancia del Zombi al Herue
+                GameObject aldeanoCerca = null;// GameObject que almacena a todos los Aldeanos en la esena
+
+                foreach (Ciudadano aldeano in Transform.FindObjectsOfType<Ciudadano>())
+                {
+                    tempCyti = Vector3.Distance(aldeano.transform.position, transform.position);// Distancia del Zombi al Aldeano mas sercano
+
+                    if (tempCyti < vision)
                     {
-                        tempCyti = Vector3.Distance(aldeano.transform.position, transform.position);// Distancia del Zombi al Aldeano mas sercano
-
-                        if (tempCyti < vision)
-                        {
-                            vision = tempCyti;
-                            aldeanoCerca = aldeano.gameObject; //remplasa el null por el Aldeano mas sercano
-
-                        }
+                        vision = tempCyti;
+                        aldeanoCerca = aldeano.gameObject; //remplasa el null por el Aldeano mas sercano
 
                     }
-                    // If que hace que el Zombi tenga como prioridad al Aldeano y no al herue
-                    if (aldeanoCerca != null)
-                    {
-                        directionCyti = Vector3.Normalize(aldeanoCerca.transform.position - transform.position);
-                        transform.position += directionCyti * 0.1f;
-                    }
-                    else if (DistanciaHero <= vision)
-                    {
-                        ataque = hableNinja();
-                        directionHero = Vector3.Normalize(player.transform.position - transform.position);
-                        transform.position += directionHero * 0.1f;
-                    }
-                    else
-                    {
-                        vision = 5f;
-                        ComportarceNormal();
-                    }
+
+                }
+                // If que hace que el Zombi tenga como prioridad al Aldeano y no al herue
+                if (aldeanoCerca != null)
+                {
+                    directionCyti = Vector3.Normalize(aldeanoCerca.transform.position - transform.position);
+                    transform.position += directionCyti * 0.1f;
+                }
+                else if (DistanciaHero <= vision)
+                {
+                    ataque = hableNinja();
+                    directionHero = Vector3.Normalize(player.transform.position - transform.position);
+                    transform.position += directionHero * 0.1f;
+                }
+                else
+                {
+                    vision = 5f;
+                    ComportarceNormal();
                 }
             }
 
@@ -192,7 +211,18 @@ namespace NPC // NameSpace que guarga toda la estructura del enemigo
                 if (collision.transform.tag == "Herue")
                 {
                     Juego.perder.SetActive(true);
+                    Juego.vida--;
                     Juego.vivo = false;
+                }
+                if (collision.transform.tag== "bala")
+                {
+                    datoNinya.health = datoNinya.health - (Disparo.daño - datoNinya.armor);
+                    if (datoNinya.health<=0)
+                    {
+                        Destroy(this.gameObject);
+                        Juego.ninjas--;
+                        
+                    }
                 }
             }
         }
@@ -204,8 +234,8 @@ namespace NPC // NameSpace que guarga toda la estructura del enemigo
             public int edad;
             public int health;
             public int attack;
+            public int armor;
         }
-
         public enum Habilidades
         {
             rasengan, chidori, amateras, Taijutsu, Genjutsu, Shippou
